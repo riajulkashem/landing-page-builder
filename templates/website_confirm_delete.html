@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Website | Landing Page Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-gradient {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: gradientMove 20s infinite alternate;
+        }
+
+        .gradient-1 {
+            background: linear-gradient(45deg, #ef4444, #dc2626);
+            width: 50%;
+            height: 50%;
+            top: -25%;
+            left: -25%;
+        }
+
+        .gradient-2 {
+            background: linear-gradient(45deg, #6366f1, #4f46e5);
+            width: 60%;
+            height: 60%;
+            bottom: -30%;
+            right: -30%;
+        }
+
+        @keyframes gradientMove {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(100px, 50px) rotate(45deg); }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .back-button {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            z-index: 60;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .back-button:hover {
+            transform: translateX(-4px);
+        }
+
+        .back-button:hover .arrow-icon {
+            transform: translateX(-4px);
+        }
+
+        .arrow-icon {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .back-button-glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .back-button {
+                top: 16px;
+                left: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen p-6">
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="bg-gradient gradient-1"></div>
+        <div class="bg-gradient gradient-2"></div>
+    </div>
+
+    <!-- Back Button -->
+    <a href="{% url 'website_list' %}" class="back-button flex items-center space-x-2 text-white/90 hover:text-white back-button-glass px-4 py-2 rounded-lg">
+        <svg class="w-5 h-5 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        <span class="font-medium hidden sm:inline">Back</span>
+    </a>
+
+    <!-- Delete Confirmation Card -->
+    <div class="glass-card max-w-md w-full p-8 rounded-2xl">
+        <div class="text-center mb-8">
+            <svg class="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <h1 class="text-2xl font-bold text-white mb-2">Delete Website</h1>
+            <p class="text-white/80">
+                Are you sure you want to delete <br>
+                <span class="font-semibold text-white">{{ website.name }}</span>?
+            </p>
+            <p class="text-white/60 text-sm mt-2">This action cannot be undone.</p>
+        </div>
+
+        <form method="POST" class="flex flex-col space-y-4">
+            {% csrf_token %}
+            <button type="submit" class="btn-delete text-white py-3 px-6 rounded-lg font-medium w-full">
+                Yes, Delete Website
+            </button>
+            <a href="{% url 'website_list' %}" class="btn-cancel text-white/90 hover:text-white py-3 px-6 rounded-lg font-medium text-center">
+                Cancel
+            </a>
+        </form>
+    </div>
+</body>
+</html>

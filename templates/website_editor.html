@@ -1,0 +1,70 @@
+{% extends "base.html" %} {% block title %}My Websites{% endblock %}
+<!--  -->
+{% block extra_css %}
+<!-- GrapesJS Core CSS -->
+<link
+  href="https://unpkg.com/grapesjs/dist/css/grapes.min.css"
+  rel="stylesheet"
+/>
+<!-- GrapesJS Core JS -->
+<script src="https://unpkg.com/grapesjs"></script>
+<!--  grapesjs-tailwind  -->
+<script src="https://unpkg.com/grapesjs-tailwind"></script>
+{% endblock %} {% block main_content %}
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-white">{{ website.name }}</h1>
+    <button
+    id="save-project"
+      class="btn-gradient text-white px-6 py-3 rounded-lg font-medium"
+    >
+      Save
+    </a>
+  </div>
+  <div id="gjs" style="height: calc(100vh - 100px); width: 100%"></div>
+</main>
+{% endblock %} {% block js_script %}
+<script type="text/javascript">
+  var editor = grapesjs.init({
+    container: "#gjs",
+    // ...
+    plugins: ["grapesjs-tailwind"],
+    pluginsOpts: {
+      "grapesjs-tailwind": {
+        /* options */
+      },
+    },
+  });
+
+  // Save data on button click
+  document
+    .getElementById("save-project")
+    .addEventListener("click", function () {
+      const html = editor.getHtml();
+      const css = editor.getCss();
+      const project = { components: html, styles: css };
+      const body = new FormData();
+      body.append("project", JSON.stringify(project));
+
+      fetch(`{% url 'website_update' website.id %}`, {
+        method: "POST",
+        body: body,
+        headers: {
+          "X-CSRFToken": "{{ csrf_token }}", // Include CSRF token if required
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === "success") {
+            alert("Page saved successfully!");
+          } else {
+            alert("Save failed!");
+          }
+        })
+        .catch((error) => {
+          console.error("Save failed:", error);
+        });
+    });
+</script>
+{% endblock %}

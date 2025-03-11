@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Websites{% endblock %} | Landing Page Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body class="pt-20">
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="bg-gradient gradient-1"></div>
+        <div class="bg-gradient gradient-2"></div>
+    </div>
+
+    <!-- Navbar -->
+    {% include 'navbar.html' %}
+
+    <!-- Messages -->
+    {% if messages %}
+        <div class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50">
+            {% for message in messages %}
+                <div class="fade-in glass-nav rounded-lg px-6 py-4 mb-4 text-white flex items-center message">
+                    <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                    </svg>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+   {% block main_content %} 
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {% block breadcumb %}
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-white">My Websites</h1>
+            <a href="{% url 'website_create' %}" class="btn-gradient text-white px-6 py-3 rounded-lg font-medium">
+                Create New Website
+            </a>
+        </div>
+        {% endblock %}
+
+        {% block content %}
+        {% if websites %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for website in websites %}
+                <div class="website-card rounded-xl overflow-hidden fade-in" style="animation-delay: 1s">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-white mb-2">{{ website.name }}</h3>
+                        <p class="text-white/60 text-sm mb-4">Created on {{ website.created_at|date:'F d, Y' }}</p>
+                        <div class="flex space-x-4">
+                            <a href="#" class="text-blue-400 hover:text-blue-300 font-medium transition-colors">Edit</a>
+                            <a href="{% url 'website_delete' website.id %}" class="text-red-400 hover:text-red-300 font-medium transition-colors">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center py-12">
+            <p class="text-white/80 text-lg mb-6">You haven't created any websites yet. Start by creating one!</p>
+            <a href="{% url 'website_create' %}" class="btn-gradient text-white px-8 py-4 rounded-lg font-medium inline-block">
+                Create Your First Website
+            </a>
+        </div>
+    {% endif %}
+        {% endblock %}
+    </main>
+    {% endblock %}
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-button').addEventListener('click', function() {
+            document.querySelector('.mobile-menu').classList.toggle('hidden');
+        });
+
+        // Auto-hide messages after 5 seconds
+        setTimeout(function() {
+            const messages = document.querySelectorAll('.message');
+            messages.forEach(msg => {
+                msg.style.opacity = '0';
+                setTimeout(() => msg.remove(), 300);
+            });
+        }, 5000);
+    </script>
+    {% block js_script %} {% endblock %}
+</body>
+</html>
