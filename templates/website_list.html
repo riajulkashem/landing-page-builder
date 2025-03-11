@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}My Websites{% endblock %}
+
+{% block breadcumb %}
+<div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-white">My Websites</h1>
+    <a href="{% url 'website_create' %}" class="btn-gradient text-white px-6 py-3 rounded-lg font-medium">
+        Create New Website
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+{% if websites %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for website in websites %}
+        <div class="website-card rounded-xl overflow-hidden fade-in" style="animation-delay: 1s">
+            <div class="p-6">
+                <h3 class="text-xl font-semibold text-white mb-2">{{ website.name }}</h3>
+                <p class="text-white/60 text-sm mb-4">Created on {{ website.created_at|date:'F d, Y' }}</p>
+                <div class="flex space-x-4">
+                    <a href="{% url 'website_preview' website.id %}" class="text-green-400 hover:text-green-300 font-medium transition-colors">View</a>
+                    <a href="{% url 'content_editor' website.id %}" class="text-blue-400 hover:text-blue-300 font-medium transition-colors">Edit</a>
+                    <a href="{% url 'website_delete' website.id %}" class="text-red-400 hover:text-red-300 font-medium transition-colors">Delete</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-12">
+    <p class="text-white/80 text-lg mb-6">You haven't created any websites yet. Start by creating one!</p>
+</div>
+{% endif %}
+{% endblock %}
