@@ -1,18 +1,37 @@
-{% extends "base.html" %} {% block title %}My Websites{% endblock %}
+
+{% extends "base.html" %}
+{% load static %}
+<!--  -->
+
+{% block title %}My Websites{% endblock %}
 <!--  -->
 {% block extra_css %}
 <!-- GrapesJS Core CSS -->
 <link
-  href="https://unpkg.com/grapesjs/dist/css/grapes.min.css"
+  href="{% static 'css/grapejs.min.css' %}"
   rel="stylesheet"
 />
 <!-- GrapesJS Core JS -->
-<script src="https://unpkg.com/grapesjs"></script>
+<script src="{% static 'js/grapejs.min.js' %}"></script>
 <!--  grapesjs-tailwind  -->
-<script src="https://unpkg.com/grapesjs-tailwind"></script>
+<script src="{% static 'js/grapejs-tailwind.min.js' %}"></script>
 {% endblock %} {% block main_content %}
 <!-- Main Content -->
 <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50">
+            <div class="fade-in glass-nav rounded-lg px-6 py-4 mb-4 text-white bg-gradient-to-r from-green-500 to-green-700 flex items-center success-message hidden">
+                <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                </svg>
+               Content Saved Successfully!
+            </div>
+            <div class="fade-in glass-nav rounded-lg px-6 py-4 mb-4 text-white flex bg-gradient-to-r from-red-500 to-red-700 items-center failed-message hidden">
+                <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/>
+                </svg>
+               Content Saved Successfully!
+            </div>
+    </div>
   <div class="flex justify-between items-center mb-8">
     <h1 class="text-3xl font-bold text-white">{{ website.name }}</h1>
     <button
@@ -28,7 +47,6 @@
 <script type="text/javascript">
   var editor = grapesjs.init({
     container: "#gjs",
-    // ...
     plugins: ["grapesjs-tailwind"],
     pluginsOpts: {
       "grapesjs-tailwind": {
@@ -56,15 +74,25 @@
       })
         .then((response) => response.json())
         .then((data) => {
-          if (data.status === "success") {
-            alert("Page saved successfully!");
-          } else {
-            alert("Save failed!");
-          }
+          if (data.status === "success") showSuccessMessage(); else showFailedMessage();
         })
         .catch((error) => {
           console.error("Save failed:", error);
         });
     });
+
+    function showSuccessMessage() {
+        document.querySelector('.success-message').classList.remove('hidden');
+        setTimeout(() => {
+            document.querySelector('.success-message').classList.add('hidden');
+        }, 3000);
+    }
+
+    function showFailedMessage() {
+        document.querySelector('.failed-message').classList.remove('hidden');
+        setTimeout(() => {
+            document.querySelector('.failed-message').classList.add('hidden');
+        }, 3000);
+    }
 </script>
 {% endblock %}

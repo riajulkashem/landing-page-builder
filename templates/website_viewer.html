@@ -28,12 +28,6 @@
           transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      .back-button-glass {
-          background: rgba(8, 196, 93, 0.7);
-          backdrop-filter: blur(12px);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
       @media (max-width: 768px) {
           .back-button {
               top: 16px;
@@ -48,7 +42,7 @@
     <!-- Add this right after the <body> tag, before the background animation div -->
     <a
       href="{% url 'website_list' %}"
-      class="back-button flex items-center space-x-2 text-white/90 hover:text-white back-button-glass px-4 py-2 rounded-lg"
+      class="back-button flex items-center space-x-2 text-white/90 hover:text-white bg-gradient-to-r from-green-500 to-green-700 px-4 py-2 rounded-lg"
     >
       <svg
         class="w-5 h-5 arrow-icon"
