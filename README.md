@@ -58,7 +58,7 @@ Now, open your browser and visit **http://127.0.0.1:8000/** 🎉
 ---
 
 ## 📸 **Screenshots**  
-(Add some images of your project in action!)
+I will add soon
 
 ---
 
