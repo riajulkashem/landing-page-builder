@@ -1,7 +1,3 @@
-Here’s a **professional and well-structured README.md** file for your project:  
-
----
-
 # 🚀 **HTML Landing Page Builder**  
 
 A powerful **drag-and-drop landing page builder** that allows users to design, customize, and update landing pages effortlessly. Built using **Django, TailwindCSS, and GrapesJS**.
@@ -82,5 +78,3 @@ Contributions are welcome! Feel free to **fork** this repository and submit a **
 ## 📞 **Contact**  
 For any inquiries, reach out to me on:  
 📧 Email: *riajulkashem.com*  
-
----
